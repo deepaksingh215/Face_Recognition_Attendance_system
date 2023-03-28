@@ -106,17 +106,24 @@ def updateStudent(request):
 
 @login_required(login_url = 'login')
 def takeAttendence(request):
+    try:
+        faculty = request.user.faculty
+    except:
+        messages.error(request, "You are not Authorized as a faculty in this insitute.")
+        return redirect('home')
+    
     if request.method == 'POST':
         details = {
-            'branch':request.POST['branch'],
+            'branch': request.POST['branch'],
             'year': request.POST['year'],
-            'section':request.POST['section'],
-            'period':request.POST['period'],
-            'faculty':request.user.faculty
-            }
+            'section': request.POST['section'],
+            'period': request.POST['period'],
+            'faculty': faculty
+        }
+
         if Attendence.objects.filter(date = str(date.today()),branch = details['branch'], year = details['year'], section = details['section'],period = details['period']).count() != 0 :
             messages.error(request, "Attendence already recorded.")
-            return redirect('home')
+            return redirect('base')
         else:
             students = Student.objects.filter(branch = details['branch'], year = details['year'], section = details['section'])
             names = Recognizer(details)
