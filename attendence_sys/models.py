@@ -9,7 +9,7 @@ def user_directory_path(instance, filename):
     return 'Faculty_Images/{}'.format(filename)
 
 class Faculty(models.Model):
-
+    id = models.BigAutoField(primary_key=True)
     user = models.OneToOneField(User, null = True, blank = True, on_delete= models.CASCADE)
     firstname = models.CharField(max_length=200, null=True, blank=True)
     lastname = models.CharField(max_length=200, null=True, blank=True)
@@ -49,6 +49,7 @@ class Student(models.Model):
         ('C','C'),
     )
 
+    id = models.BigAutoField(primary_key=True)
     firstname = models.CharField(max_length=200, null=True, blank=True)
     lastname = models.CharField(max_length=200, null=True, blank=True)
     registration_id = models.CharField(max_length=200, null=True)
@@ -62,8 +63,7 @@ class Student(models.Model):
         return str(self.registration_id)
 
 class Attendence(models.Model):
-    # faculty = models.ForeignKey(Faculty, null = True, on_delete= models.SET_NULL)
-    # student = models.ForeignKey(Student, null = True, on_delete= models.SET_NULL)
+    id = models.BigAutoField(primary_key=True)
     Faculty_Name = models.CharField(max_length=200, null=True, blank=True)
     Student_ID = models.CharField(max_length=200, null=True, blank=True)
     date = models.DateField(auto_now_add = True, null = True)
