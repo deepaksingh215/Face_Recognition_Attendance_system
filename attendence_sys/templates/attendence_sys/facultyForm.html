@@ -25,8 +25,11 @@
 	<div class="col-md-9">
 		<div class="card card-body">
 			
-			<form method="POST" action="" enctype="multipart/form-data">
+			<form method="POST" action="{% url 'account' %}" enctype="multipart/form-data">
 				{% csrf_token %}
+				<div class="form-group" style="visibility: hidden !important;margin-top: -40px;">
+					<input type="text" class="form-control" value="{{ prev_reg_id }}" name="prev_reg_id">
+				</div>
 				{{form.as_p}}
 		
 			<input class="btn btn-primary" type="submit" name="Update Information">

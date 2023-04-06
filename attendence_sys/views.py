@@ -154,7 +154,13 @@ def takeAttendence(request):
 
 @login_required(login_url = 'login')
 def searchAttendence(request):
-    attendences = Attendence.objects.all()
+    try:
+        if request.user.is_authenticated:
+            attendences = Attendence.objects.filter(Faculty_Name =  request.user.faculty)
+    except:
+        messages.error(request, "Only  Faculty has the permission to Search Attendance.")
+        return redirect('StudentUpdate')
+    
     myFilter = AttendenceFilter(request.GET, queryset=attendences)
     attendences = myFilter.qs
     context = {'myFilter':myFilter, 'attendences': attendences, 'ta':False}
@@ -162,9 +168,24 @@ def searchAttendence(request):
 
 
 def facultyProfile(request):
-    faculty = request.user.faculty
+    try:
+        faculty = request.user.faculty
+    except:
+        messages.error(request, "You are not Authorized as a faculty in this insitute.")
+        return redirect('home')
     form = FacultyForm(instance = faculty)
     context = {'form':form}
+
+    if request.method == 'POST':
+        try:
+            updateFacultyForm = FacultyForm(data = request.POST, files=request.FILES, instance = faculty)
+            if updateFacultyForm.is_valid():
+                updateFacultyForm.save()
+                messages.success(request, 'Updation Success')
+                return redirect('home')
+        except:
+            messages.error(request, 'Updation Unsucessfull')
+            return redirect('home')
     return render(request, 'attendence_sys/facultyForm.html', context)
 
 
