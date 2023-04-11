@@ -15,9 +15,11 @@ from .filters import AttendenceFilter
 from .recognizer import Recognizer
 from datetime import date
 
+@login_required(login_url = 'login')
 def base(request):
     return render(request, 'attendence_sys/base.html')
 
+@login_required(login_url = 'login')
 def home(request):
     return render(request, 'attendence_sys/home.html')
 
